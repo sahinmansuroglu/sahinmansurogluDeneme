@@ -4,7 +4,7 @@ class Game {
         this.app = app;
         this.as = "arda";
         this.animalUrl = ["bird.png", "dog.png", "fish.png",
-            "fish1.png", "fish1.png", "fox.png",
+            "fish1.png", "fish2.png", "fox.png",
             "horse.png", "kartPng.png", "kartPng1.png",
             "buttonBg.png", "arkaPlanButton.jpg"
         ];
@@ -54,6 +54,7 @@ class Game {
         this.buttonContainer.y = (800 - this.buttonContainer.height) / 2;;
         this.app.stage.addChild(this.buttonContainer);
         console.log(this.kartContainer.children.length);
+        this.idlist = null;
     }
     removeChild(container) {
         for (var i = container.children.length - 1; i >= 0; i--) {
@@ -61,13 +62,30 @@ class Game {
         };
 
     }
-    startGame(satir, sutun) {
 
+    listeOlustur(elemanSayisi) {
+        let idlist = []
+        for (var i = 1; i <= elemanSayisi / 2; i++) {
+            idlist.push(i);
+            idlist.push(i);
+        }
+        return idlist;
+    }
+    startGame(satir, sutun) {
+        this.idlist = this.listeOlustur(satir * sutun);
         let konumX = 0;
         let konumY = 0;
+        console.log(this.idlist);
         for (var i = 0; i < satir; i++) {
             for (var j = 0; j < sutun; j++) {
-                let kutucuk = new kutu(konumX, konumY, 200, 200, 0XA7C6ED, false, 0.8, this.app.loader.resources["res9"].texture);
+
+                const random = Math.floor(Math.random() * this.idlist.length); // [0,9)
+                console.log("Önce:", this.idlist)
+                const id = this.idlist[random];
+                this.idlist = this.idlist.filter((item, index) => index != random);
+                console.log("Sonra:", this.idlist)
+                console.log("random", random, "id:", id, );
+                let kutucuk = new kutu(konumX, konumY, 200, 200, 0XA7C6ED, false, 0.8, this.app.loader.resources[`res${id}`].texture);
                 this.kartContainer.addChild(kutucuk);
                 konumX += 220;
             }
